@@ -1,3 +1,7 @@
+function! gitreview#gitgutter#available() abort " {{{
+	return exists('g:loaded_gitgutter') && g:loaded_gitgutter
+endfunction " }}}
+
 function! gitreview#gitgutter#process_buffer(bufnr, realtime) abort " {{{
 	let path = expand('#' . a:bufnr . ':p')
 	let base_commit_id = gitreview#get_base_commit(path)
