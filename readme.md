@@ -29,3 +29,10 @@ Dependency: [Unite.vim](https://github.com/Shougo/unite.vim)
 Dependency: [Gitgutter](https://github.com/airblade/vim-gitgutter)
 
 If Gitgutter installed, sign represents changed lines since `base_commit`.
+
+Some key map is provided:
+
+* `<Plug>(gitreview-gitgutter-next-sign)`
+  * Jump to next sign in same file
+* `<Plug>(gitreview-gitgutter-prev-sign)`
+  * Jump to previous sign in same file
