@@ -4,6 +4,11 @@ let s:base_commits = {}
 function! gitreview#set_base_commit(commit_id, merge_base, path) abort " {{{
 	let root = gitreview#util#git_root(a:path)
 
+	if empty(a:commit_id)
+		let s:base_commits[root] = ''
+		return
+	endif
+
 	if a:merge_base
 		let resolved_id = gitreview#util#git(root, ['merge-base', 'HEAD', a:commit_id])
 	else
@@ -18,13 +23,17 @@ function! gitreview#set_base_commit(commit_id, merge_base, path) abort " {{{
 	let s:base_commits[root] = resolved_id
 endfunction " }}}
 
-function! gitreview#get_base_commit(path) abort " {{{
+function! gitreview#get_base_commit(path, ...) abort " {{{
+	let readable = a:0 == 0 ? 0 : a:1
 	let root = gitreview#util#git_root(a:path, 0)
 	if empty(root)
 		return ''
 	endif
 
 	let id = get(s:base_commits, root, '')
+	if readable && len(id)
+		let id = substitute(gitreview#util#git(root, ['name-rev', '--name-only', id]), "\n$", '', '')
+	endif
 	return id
 endfunction " }}}
 

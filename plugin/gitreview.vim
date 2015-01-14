@@ -1,6 +1,6 @@
 " Primary functions {{{
 command! -nargs=1 GitReviewStart call gitreview#set_base_commit(<f-args>, 1, expand('%'))
-command! -nargs=0 GitReviewEnd call gitreview#set_base_commit('', 0), expand('%')
+command! -nargs=0 GitReviewEnd call gitreview#set_base_commit('', 0, expand('%'))
 " }}}
 
 " Unite source {{{
