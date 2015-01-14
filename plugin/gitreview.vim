@@ -28,6 +28,9 @@ endif
 
 " GitGutter integration {{{
 if gitreview#gitgutter#available()
+	nmap <silent><Plug>(gitreview-gitgutter-next-sign) :<C-u>call gitreview#gitgutter#jump_to_next_sign()<CR>
+	nmap <silent><Plug>(gitreview-gitgutter-prev-sign) :<C-u>call gitreview#gitgutter#jump_to_prev_sign()<CR>
+
 	command! GitGutterAll call gitreview#gitgutter#all()
 	command! GitGutter    call gitreview#gitgutter#process_buffer(bufnr(''), 0)
 

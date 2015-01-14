@@ -25,3 +25,52 @@ function! gitreview#gitgutter#all() abort " {{{
     endif
   endfor
 endfunction " }}}
+
+function!  gitreview#gitgutter#signs() abort " {{{
+	call gitgutter#sign#find_current_signs()
+	return b:gitgutter_gitgutter_signs
+endfunction " }}}
+
+function! gitreview#gitgutter#next_sign_line_number(prev) abort " {{{
+	let signs = gitreview#gitgutter#signs()
+	let line = getpos('.')[1]
+	let sorted = []
+	for l in keys(signs)
+		let data = copy(signs[l])
+		let data.line_number = l
+		call add(sorted, data)
+	endfor
+	call sort(sorted, function('s:sort_by_line_number'))
+
+	if a:prev
+		call reverse(sorted)
+	endif
+
+	for sign in sorted
+		if (a:prev && sign.line_number < line) || (!a:prev && sign.line_number > line)
+			return sign.line_number
+		endif
+	endfor
+	return 0
+endfunction " }}}
+
+function! s:sort_by_line_number(l, r) abort " {{{
+	return a:l.line_number - a:r.line_number
+endfunction " }}}
+
+function! gitreview#gitgutter#jump_to_next_sign() abort " {{{
+	 call s:set_line(gitreview#gitgutter#next_sign_line_number(0))
+endfunction " }}}
+
+function! gitreview#gitgutter#jump_to_prev_sign() abort " {{{
+	 call s:set_line(gitreview#gitgutter#next_sign_line_number(1))
+endfunction " }}}
+
+function! s:set_line(line) abort " {{{
+	if a:line <= 0
+		return
+	endif
+	let pos = getpos('.')
+	let pos[1:2] = [a:line, 0]
+	call setpos('.', pos)
+endfunction " }}}
