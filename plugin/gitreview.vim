@@ -18,6 +18,12 @@ call unite#define_source(s:unite_source)
 unlet s:unite_source
 " }}}
 
+" Fugitive integration {{{
+if gitreview#fugitive#available()
+	command! -nargs=0 GitReviewDiff call gitreview#fugitive#diff_command()
+endif
+" }}}
+
 " GitGutter integration {{{
 command! GitGutterAll call gitreview#gitgutter#all()
 command! GitGutter    call gitreview#gitgutter#process_buffer(bufnr(''), 0)
