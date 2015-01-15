@@ -15,6 +15,13 @@ Dependency: [Fugitive](https://github.com/tpope/vim-fugitive)
 * `GitReviewDiff`
   * Show diff of `base_commit..HEAD`
 
+## Statusline string
+
+Dependency: [Fugitive](https://github.com/tpope/vim-fugitive)
+
+* `gitreview#fugitive#branch_string()`
+  * returns `'<base_commit_id>..<current_branch_name>'`
+
 
 ## Unite source
 
