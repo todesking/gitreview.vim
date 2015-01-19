@@ -17,9 +17,7 @@ Dependency: [Fugitive](https://github.com/tpope/vim-fugitive)
 
 ## Statusline string
 
-Dependency: [Fugitive](https://github.com/tpope/vim-fugitive)
-
-* `gitreview#fugitive#branch_string()`
+* `gitreview#branch_string(current_file_path)`
   * returns `'<base_commit_id>..<current_branch_name>'`
 
 
