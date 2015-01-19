@@ -19,7 +19,7 @@ Dependency: [Fugitive](https://github.com/tpope/vim-fugitive)
 
 * `gitreview#branch_string(current_file_path)`
   * returns `'<base_commit_id>..<current_branch_name>'`
-
+  * example: `set statusline = '... %{gitreview#branch_string(expand("%"))} ...'
 
 ## Unite source
 
