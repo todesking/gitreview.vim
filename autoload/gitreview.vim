@@ -10,9 +10,9 @@ function! gitreview#set_base_commit(commit_id, merge_base, path) abort " {{{
 	endif
 
 	if a:merge_base
-		let resolved_id = gitreview#util#git(root, ['merge-base', 'HEAD', a:commit_id])
+		let resolved_id = gitreview#util#git_merge_base(root, 'HEAD', a:commit_id)
 	else
-		let resolved_id = gitreview#util#git(root, ['merge-base', a:commit_id, a:commit_id])
+		let resolved_id = gitreview#util#git_merge_base(root, a:commit_id, a:commit_id)
 	endif
 	let resolved_id = substitute(resolved_id, '\n\+', '', 'g')
 
@@ -31,8 +31,8 @@ function! gitreview#get_base_commit(path, ...) abort " {{{
 	endif
 
 	let id = get(s:base_commits, root, '')
-	if readable && len(id)
-		let id = substitute(gitreview#util#git(root, ['name-rev', '--name-only', id]), "\n$", '', '')
+	if readable
+		let id = gitreview#util#git_name_rev(root, id)
 	endif
 	return id
 endfunction " }}}
@@ -50,4 +50,16 @@ endfunction " }}}
 
 function! gitreview#in_review(path) abort " {{{
 	return !empty(gitreview#get_base_commit(a:path))
+endfunction " }}}
+
+function! gitreview#branch_string(path) abort " {{{
+	let root = gitreview#util#git_root(a:path, 0)
+	let head = gitreview#util#git_head_name(root)
+	if len(head)
+		let base_commit_id = gitreview#get_base_commit(root, 1)
+		if len(base_commit_id)
+			let head = base_commit_id . '..' . head
+		endif
+	endif
+	return head
 endfunction " }}}

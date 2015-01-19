@@ -1,8 +1,46 @@
-function! gitreview#util#git(root, args) abort " {{{
+function! gitreview#util#git(root, args, format) abort " {{{
+	if empty(a:root)
+		if a:format ==# ''
+			return ''
+		elseif a:format ==# 'multiline'
+			return []
+		elseif a:format ==# 'singleline'
+			return ''
+		endif
+		throw 'Illegal format: ' . a:format
+	endif
+
 	let command = 'cd ' . shellescape(a:root) . ' && '
 	\ . 'git ' . join(map(a:args, 'shellescape(v:val)'), ' ')
 
-	return system(command)
+	let raw = system(command)
+	if a:format ==# ''
+		return raw
+	elseif a:format ==# 'multiline'
+		return split(raw, '\n')
+	elseif a:format ==# 'singleline'
+		return substitute(raw, '\n\+', '', 'g')
+	endif
+	throw 'Illegal format: ' . a:format
+endfunction " }}}
+
+function! gitreview#util#git_name_rev(root, rev) abort " {{{
+	if empty(a:rev)
+		return ''
+	endif
+	return gitreview#util#git(a:root, ['name-rev', '--name-only', a:rev], 'singleline')
+endfunction " }}}
+
+function! gitreview#util#git_head_id(root) abort " {{{
+	return gitreview#util#git(a:root, ['show', '--pretty=%H', '-s', 'HEAD'], 'singleline')
+endfunction " }}}
+
+function! gitreview#util#git_head_name(root) abort " {{{
+	return gitreview#util#git_name_rev(a:root, gitreview#util#git_head_id(a:root))
+endfunction " }}}
+
+function! gitreview#util#git_merge_base(root, rev1, rev2) abort " {{{
+	return gitreview#util#git(a:root, ['merge-base', a:rev1, a:rev2], 'singleline')
 endfunction " }}}
 
 function! gitreview#util#git_root(...) abort " {{{
