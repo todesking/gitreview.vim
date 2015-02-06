@@ -44,7 +44,7 @@ function! gitreview#changed_files(path) abort " {{{
 	if empty(base_commit_id)
 		return []
 	endif
-	let files = split(gitreview#util#git(root, ['diff', '--name-only', base_commit_id . '..HEAD']), "\n")
+	let files = gitreview#util#git(root, ['diff', '--name-only', base_commit_id . '..HEAD'], 'multiline')
 	return files
 endfunction " }}}
 
